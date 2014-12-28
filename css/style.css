@@ -1,0 +1,12 @@
+.myStats { color: green; }
+.targetStats { color: red; }
+.important { color: red; margin-top: 15px; }
+
+.result { 
+	border-bottom-style: double; border-bottom-color: #000;
+	border-top-style: solid; border-top-width: 1px; border-top-color: #000;
+}
+
+.container { background-color: #eee !important; }
+.footer { margin-top: 5%; margin-bottom: 2%; font-family: nova-mono; font-weight: 300; font-size: 12px; }
+.HTC-Red {color: rgb(234, 42, 42); } 

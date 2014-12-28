@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html ng-app="cccalc" lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Crime City fight calculator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Crime City PVP/Rob/war Calculator">
+  <meta name="author" content="Nicolaj Nyvang">
+
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link href="css/style.css" rel="stylesheet">
+
+  <!-- Fav and touch icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="img/apple-touch-icon-144-precomposed.png">
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="img/apple-touch-icon-114-precomposed.png">
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="img/apple-touch-icon-72-precomposed.png">
+  <link rel="apple-touch-icon-precomposed" href="img/apple-touch-icon-57-precomposed.png">
+  <link rel="shortcut icon" href="img/favicon.png">
+  
+	
+	<script src="http://code.angularjs.org/1.2.6/angular.js"></script>
+	<script type="text/javascript" src="js/scripts.js"></script>
+</head>
+
+<body >
+<div class="container" ng-controller="calculations">
+	<div class="row clearfix">
+		<div class="col-md-12 column">
+			<div class="jumbotron">
+				<h1>
+					CC Calc
+				</h1>
+				<p>
+					This very simple calculator will help you decide on your chances in a fight. Also, it may (depend on your stats) give you a hint about what todo to improve.<br />
+				This is a very simple calculator and its not even in beta yet, so suggestions for improvements would be nice.
+				</p>			
+				<h4><small>Enjoy<br />&nbsp;&nbsp;-&nbsp; Nyvang</small></h4>
+			</div>
+		</div>
+	</div>
+	<div class="row clearfix">
+		<div class="col-md-12 column" >
+			
+			<form class="form-vertical" role="form">
+				<h4> Your stats </h4>
+				
+				<label for="myMafiaAtt" class="col-sm-2">Mafia Attack</label>
+				<div class="col-sm-10">
+					<input type="number" class="form-control" ng-model="stats.myMafiaAtt" name="myMafiaAtt">
+				</div>
+				
+				<label for="myMafiaDef" class="col-sm-2">Mafia Defence</label>
+				<div class="col-sm-10">
+					<input type="number" class="form-control" ng-model="stats.myMafiaDef" name="myMafiaDef">
+				</div>
+				
+				<label for="myMafiaAcc" class="col-sm-2">Accomplice in Mafia</label>
+				<div class="col-sm-10">
+					<input type="number" class="form-control" ng-model="stats.myMafiaAcc" name="myMafiaAcc">
+				</div>
+				
+				<label for="myKingpin" class="col-sm-2">Kingpin Power</label>
+				<div class="col-sm-10">
+					<input type="number" class="form-control" ng-model="stats.myKingpin" name="myKingpin">
+				</div>
+				
+				<label for="targetDef" class="col-sm-2">Target Mafia Defence</label>
+				<div class="col-sm-10">
+					<input type="number" class="form-control" ng-model="stats.targetDef" name="targetDef">
+				</div>
+				
+				<div class="col-sm-offset-2 col-sm-10">
+					 <button ng-click="doCalc()" class="btn btn-default">Calculate</button>
+				</div>
+				
+				<hr />
+			<span ng-show="showResults">
+				<div class="col-sm-offset-2 col-sm-2">
+					<h3 class="myStats">Your stats</h3>
+					
+					<div>Att: {{ stats.myMafiaAtt }}</div>
+					<div>Def: {{ stats.myMafiaDef }}</div>
+					<div class="result">Mafia: {{ stats.myMafiaAtt + stats.myMafiaDef }}</div>
+					
+				</div>
+				<div class="col-sm-2">
+					<h3 class="myStats">Your Acc &amp; KP</h3>
+					
+					<div>Acc: {{ stats.myMafiaAcc }}</div>
+					<div>KP: {{ stats.myKingpin }}</div>
+					
+				</div>
+				<div class="col-sm-4">
+					<h3 class="myStats">Assesment Acc and KP</h3>
+					
+					<div>Acc is: {{ estimateMyAccomplice }}</div>
+					<div>KP is: {{ estimateMyKingpinPower }}</div>
+					<div class="result">Your chance: {{ estimateMyAccomplice }}</div>
+					
+				</div>
+				<div class="col-sm-2">
+					
+					<h3  class="targetStats">Target <small>Mafia</small></h3>
+					<div>Def: {{ stats.targetDef }}</div>
+					<div>Est. Att: {{ estimatedTargetAttack }}</div>
+					<div class="result">Est. Mafia: {{ estimatedTotalMafia }}</div>
+					
+				</div>
+			</span>
+			</form>
+		</div> 
+	</div>
+	<div class="row clearfix">
+		<div class="col-sm-offset-2 col-md-10 column important" ng-show="showWarningTxt">
+			{{ wordOfAdvice }} 
+		</div>
+	</div>
+	<div class="row clearfix">
+		<div class="col-sm-6 text-center footer">
+			Created by: 
+			<a href="http://ccnn.dk" alt="Nicolaj Nyvang" target="_blank">Nyvang</a> :: 
+			<span class="HTC-Red">HTC</span> | Powered by 
+			<a href="http://angularjs.org" alt="AngularJS by Google" target="_blank">AngularJS</a>
+		</div>
+		<div class="col-sm-6 text-center footer">
+			<a href="http://github.com/cc-calc" target="_blank" alt="Source on GitHub"><i class="fa fa-github fa-2x"></i></a>
+		</div>
+	</div>
+</div>
+</body>
+</html>
