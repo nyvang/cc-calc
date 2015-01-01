@@ -1,0 +1,77 @@
+<div class="row clearfix">
+	<div class="col-md-12 column" >
+		
+		<form class="form-vertical" role="form">
+			<h4> Your stats </h4>
+			
+			<label for="myMafiaAtt" class="col-sm-2">Mafia Attack</label>
+			<div class="col-sm-10">
+				<input type="number" class="form-control" ng-model="stats.myMafiaAtt" name="myMafiaAtt">
+			</div>
+			
+			<label for="myMafiaDef" class="col-sm-2">Mafia Defence</label>
+			<div class="col-sm-10">
+				<input type="number" class="form-control" ng-model="stats.myMafiaDef" name="myMafiaDef">
+			</div>
+			
+			<label for="myMafiaAcc" class="col-sm-2">Accomplice in Mafia</label>
+			<div class="col-sm-10">
+				<input type="number" class="form-control" ng-model="stats.myMafiaAcc" name="myMafiaAcc">
+			</div>
+			
+			<label for="myKingpin" class="col-sm-2">Kingpin Power</label>
+			<div class="col-sm-10">
+				<input type="number" class="form-control" ng-model="stats.myKingpin" name="myKingpin">
+			</div>
+			
+			<label for="targetDef" class="col-sm-2">Target Mafia Defence</label>
+			<div class="col-sm-10">
+				<input type="number" class="form-control" ng-model="stats.targetDef" name="targetDef">
+			</div>
+			
+			<div class="col-sm-offset-2 col-sm-10">
+				 <button ng-click="doCalc()" class="btn btn-default">Calculate</button>
+			</div>
+			
+			<hr />
+		<span ng-show="showResults">
+			<div class="col-sm-offset-2 col-sm-2">
+				<h3 class="myStats">Your stats</h3>
+				
+				<div>Att: {{ stats.myMafiaAtt }}</div>
+				<div>Def: {{ stats.myMafiaDef }}</div>
+				<div class="result">Mafia: {{ stats.myMafiaAtt + stats.myMafiaDef }}</div>
+				
+			</div>
+			<div class="col-sm-2">
+				<h3 class="myStats">Your Acc &amp; KP</h3>
+				
+				<div>Acc: {{ stats.myMafiaAcc }}</div>
+				<div>KP: {{ stats.myKingpin }}</div>
+				
+			</div>
+			<div class="col-sm-4">
+				<h3 class="myStats">Assesment Acc and KP</h3>
+				
+				<div>Acc is: {{ estimateMyAccomplice }}</div>
+				<div>KP is: {{ estimateMyKingpinPower }}</div>
+				<div class="result">Your chance: {{ estimateMyAccomplice }}</div>
+				
+			</div>
+			<div class="col-sm-2">
+				
+				<h3  class="targetStats">Target <small>Mafia</small></h3>
+				<div>Def: {{ stats.targetDef }}</div>
+				<div>Est. Att: {{ estimatedTargetAttack }}</div>
+				<div class="result">Est. Mafia: {{ estimatedTotalMafia }}</div>
+				
+			</div>
+		</span>
+		</form>
+	</div> 
+</div>
+<div class="row clearfix">
+	<div class="col-sm-offset-2 col-md-10 column important" ng-show="showWarningTxt">
+		{{ wordOfAdvice }} 
+	</div>
+</div>
