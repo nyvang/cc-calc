@@ -1,7 +1,13 @@
 (function () {
-	var logic = angular.module('calculation-logic', [ ]);
+	var logic = angular.module('calculation-logic', ['serviceModule']);
 
-	logic.controller('calculations', function ($scope, $window) {
+	/**
+	 * Calculations controller
+	 * Responsible for doing all calculations and proberbillity. 
+	 * Notice: Several dependencies is injected (primarily services), 
+	 * to handel the different jobs
+	 */	
+	logic.controller('calculations', function ($scope, $window, weekCalcService) {
 		$scope.stats 						= {};
 											// TEST VALUES
 		$scope.stats.myMafiaAtt				= 162000000;
@@ -32,21 +38,14 @@
 		 	return targetDef + targetAtt;
 		};
 		
-		$scope.getWeeks = function () {
-			// Hardcode the release day of Crime City version 6
-			var rel_date = '2014/12/16';
-			var weekInMillis = (3600 * 24 * 1000) * 7;
-			Date.prototype.days = function (to) {
-					return Math.abs(Math.floor(Date.parse(to) / (weekInMillis)) - Math.floor(this.getTime() / (weekInMillis)));
-			};
-			return new Date(rel_date).days(new Date());
-		};
+		// Call to the serviceModule -> weekCalcService
+		$scope.weeks = weekCalcService;
 		
 		$scope.assessAcc = function (myAcc) {
 
 			var weeksSince, good, medium, low;
 			
-			weeksSince = $scope.getWeeks();
+			weeksSince = $scope.weeks;
 
 		 	// Thresholds
 			good = 100 * weeksSince;
@@ -70,7 +69,7 @@
 
 			var weeksSince, good, medium, low;
 			
-			weeksSince = $scope.getWeeks();
+			weeksSince = $scope.weeks;
 
 		 	// Thresholds
 			good = 100 * weeksSince;
@@ -120,7 +119,7 @@
 			$scope.estimateMyKingpinPower = $scope.assessKP($scope.stats.myKingpin);
 			
 			if ($scope.showWarningTxt) 
-				$scope.createAWordOfAdvice ($scope.stats.myMafiaAcc, $scope.stats.myKingpin, $scope.getWeeks()) ;
+				$scope.createAWordOfAdvice ($scope.stats.myMafiaAcc, $scope.stats.myKingpin, $scope.weeks) ;
 		}
   });
 
