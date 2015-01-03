@@ -1,3 +1,15 @@
+/**
+ *  **** LOGIC.JS ****
+ * All calculation logic is handled from this module.
+ * Notice the dependency module: 'serviceModule' which is found in the "services.js"
+ * A lot of lines have been assembled here, and this file will be the victim of some major refactoring.
+ *
+ * Author       :   Nicolaj Nyvanng
+ * Web          :   http://ccnn.dk
+ * Contact      :   nicolajnyvang@gmail.com
+ * Project URL  :   https://github.com/nyvang/cc-calc
+ */
+ 
 (function () {
 	var logic = angular.module('calculation-logic', ['serviceModule']);
 
@@ -7,7 +19,7 @@
 	 * Notice: Several dependencies is injected (primarily services), 
 	 * to handel the different jobs
 	 */	
-	logic.controller('calculations', function ($scope, $window, weekCalcService) {
+	logic.controller('calculations', function ($scope, $window, weekCalcService, systemLanguage) {
 		$scope.stats 						= {};
 											// TEST VALUES
 		$scope.stats.myMafiaAtt				= 162000000;
@@ -40,7 +52,9 @@
 		
 		// Call to the serviceModule -> weekCalcService
 		$scope.weeks = weekCalcService;
-		
+		$scope.msg = systemLanguage;
+		console.log($scope.msg);
+
 		$scope.assessAcc = function (myAcc) {
 
 			var weeksSince, good, medium, low;
@@ -54,7 +68,7 @@
 
 		 	// Actual logic
 			if (myAcc < low) {
-				return "NO Chance!";
+				return $scope.msg.acc.none;
 			} else if (myAcc < medium) {
 				return "Low Chance!";
 			} else if (myAcc < good) {

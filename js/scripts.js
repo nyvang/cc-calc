@@ -1,8 +1,13 @@
 /**
+ *  **** SCRIPTS.JS ****
  * Angular script for the CrimeCity Calculator. 
- * Version: 0.0.2
- * Author: Nicolaj Nyvang
- * Web: http://ccnn.dk/cc-calc
+ * The main module along with templating is handled from within this file,
+ * which also inits the other js files (Controllers & services) 
+ *
+ * Author       :   Nicolaj Nyvanng
+ * Web          :   http://ccnn.dk
+ * Contact      :   nicolajnyvang@gmail.com
+ * Project URL  :   https://github.com/nyvang/cc-calc
  */
 (function () {
  
