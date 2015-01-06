@@ -9,8 +9,10 @@
  * Contact      :   nicolajnyvang@gmail.com
  * Project URL  :   https://github.com/nyvang/cc-calc
  */
- 
+
 (function () {
+	'use strict';
+
 	var logic = angular.module('calculation-logic', ['serviceModule']);
 
 	/**
@@ -19,112 +21,126 @@
 	 * Notice: Several dependencies is injected (primarily services), 
 	 * to handel the different jobs
 	 */	
-	logic.controller('calculations', function ($scope, $window, weekCalcService, systemLanguage) {
-		$scope.stats 						= {};
-											// TEST VALUES
-		$scope.stats.myMafiaAtt				= 162000000;
-		$scope.stats.myMafiaDef				= 92000000;
-		$scope.stats.myMafiaAcc				= 123;
-		$scope.stats.myKingpin				= 34;
-		$scope.stats.targetDef				= 236000000;
-											// Initial void values
-		$scope.message						= "";
-		$scope.estimatedTargetAttack		= null;
-		$scope.estimatedTotalMafia			= null;
-		$scope.estimateMyAccomplice			= null;
-		$scope.estimateMyKingpinPower		= null;
+	logic.controller('calculations', function ($scope, $window, initConstants, weekCalcService, systemLanguage) {
 		
-	 	// Flags used for ng-show/hide
-		$scope.showWarningTxt 				= true;
-		$scope.showResults 					= false;
-		
+		/********* Init *********/
+
+		// Start off by collecting data from injected dependencies
+		var weeks 						= weekCalcService,
+		 	txt 						= systemLanguage,
+			CONSTANTS 					= initConstants;
+
+		// Player stats ( initiated with testvalues during devphase )
+		$scope.stats 					= {};
+		$scope.stats.myMafiaAtt			= 1823654789;
+		$scope.stats.myMafiaDef			= 122453222;
+		$scope.stats.myMafiaAcc			= 143;
+		$scope.stats.myKingpin			= 53;
+		$scope.stats.targetDef			= 153365000;
+				
+		// Initial void values
+		$scope.estimatedTargetAttack	= null;
+		$scope.estimatedTotalMafia		= null;
+		$scope.estimateMyAccomplice		= null;
+		$scope.estimateMyKingpinPower	= null;
+		$scope.message					= "";
+
+		// Flags used for ng-show/hide
+		$scope.showWarningTxt 			= true;
+		$scope.showResults 				= false;
+
+
+		/********* Functionality *********/
+
 	 	/**
 		 * Most players have 1.5 x higher attack than defence,
 		 * hence, the multiplier is: 1.5
 		 */
 		$scope.estAtt = function (targetDef) {
-    		return Math.floor(targetDef * 1.5);
+    		return Math.floor(CONSTANTS.ATT_TO_DEF_MULTIPLIER * targetDef);
 		};
 		
 		$scope.estTotal = function (targetDef, targetAtt) {
 		 	return targetDef + targetAtt;
 		};
+
 		
-		// Call to the serviceModule -> weekCalcService
-		$scope.weeks = weekCalcService;
-		$scope.msg = systemLanguage;
-		console.log($scope.msg);
+		var	good, medium, low;
+
+	
 
 		$scope.assessAcc = function (myAcc) {
-
-			var weeksSince, good, medium, low;
-			
-			weeksSince = $scope.weeks;
+	
 
 		 	// Thresholds
-			good = 100 * weeksSince;
-			medium = 50 * weeksSince;
-			low = 15 * weeksSince;
+		 	// chances = pointsPerWeek * weeksSinceRelease
+			good = CONSTANTS.CHANCEMULTIPLIER.ACC_HIGH * weeks;
+			medium = CONSTANTS.CHANCEMULTIPLIER.ACC_MEDIUM * weeks;
+			low = CONSTANTS.CHANCEMULTIPLIER.ACC_LOW  * weeks;
 
+			console.log(CONSTANTS.CHANCEMULTIPLIER.ACC_LOW);
+
+			console.log(CONSTANTS);
 		 	// Actual logic
 			if (myAcc < low) {
-				return $scope.msg.acc.none;
+				return txt.acc.none;
 			} else if (myAcc < medium) {
-				return "Low Chance!";
+				return txt.acc.low;
 			} else if (myAcc < good) {
-				return "Medium Chance!";
+				return txt.acc.medium;
 			} else if (myAcc >= good) {
 				$scope.showWarningTxt = false;
-				return "You are epic!";
+				return txt.acc.good;
 			}
 		};
 		
 		$scope.assessKP = function (myKP) {
 
-			var weeksSince, good, medium, low;
-			
-			weeksSince = $scope.weeks;
+			good = CONSTANTS.CHANCEMULTIPLIER.KP_HIGH * weeks;
+			medium = CONSTANTS.CHANCEMULTIPLIER.KP_MEDIUM * weeks;
+			low = CONSTANTS.CHANCEMULTIPLIER.KP_LOW * weeks;
 
-		 	// Thresholds
-			good = 100 * weeksSince;
-			medium = 50 * weeksSince;
-			low = 15 * weeksSince;
+			if ((myKP < low) && ($scope.estimateMyAccomplice === txt.acc.good)) {
+				return txt.kp.none;
 
-			if ((myKP < low) && ($scope.estimateMyAccomplice === "You are epic!")) {
-				return "Acc makes up for your KP";
-
-			} else if (myKP < medium &&
-						($scope.estimateMyAccomplice === "Medium Chance!"))  {
-				return "Low -> medium chance. You should stick to Acc only.";
+			} else if (myKP < medium && ($scope.estimateMyAccomplice === txt.acc.good))  {
+				return txt.kp.low;
 
 			} else if (myKP < good) {
-				$window.console.log("High Kp, please consider moving some points to Acc if possible");
-				return "Medium Chance!";
+				console.log(txt.kp.highkp);
+				return txt.kp.medium;
 
 			} else if (myKP >= good) {
-				$window.console.log("Very high Kp, Move points to Acc. Your chances are decided by your target.");
+				console.log(txt.kp.veryhighkp);
 				$scope.showWarningTxt = false;
-				return "You are KP epic!";
+				return txt.kp.good;
 			}
-		}
+		};
 		
-		
+		/*
+		 * Creates a dynamic advice
+		 * Based on playerstats, time and a fixed threashold
+		 */
 		$scope.createAWordOfAdvice = function (myAcc, myKp, weeksSince) {
-			var highest = (myAcc > myKp) ? "Accomplish" : "Kingpin Power";
-			var warningTxt = "";
-			var accWarn = "";
-		  	if (highest === "Kingpin Power") {
-				warningTxt = "Your KP is higher than your Acc, which in most cases won´t help you at all";  
-			}
-			if (myAcc < (50 * weeksSince)) {
-				accWarn = "Your Acc is only: " + myAcc + " and to have a medium chance, you should have at least: " + (50 * weeksSince) + "\n"
-			}
-			$scope.wordOfAdvice = "The Accomplish system has been live for " + weeksSince + " weeks now," + "\n" +
-				"and your stats are rather low." + "\n" + accWarn +
-				"To preform successfull robbing, attacking (Wars included), you really have to shape up. " + warningTxt;
+			var highest = (myAcc > myKp) ? txt.acc.name : txt.kp.name;
+			var warningTxt = "",
+				accWarn = "";
 
-		} // end wordOfAdvice
-		
+		  	if (highest === txt.kp.name) {
+				warningTxt = txt.wow.kpwarning;  
+			}
+			if (myAcc < (CONSTANTS.ACC_WARNING_THRESHOLD * weeks)) {
+				accWarn = txt.wow.accwarn_1 + myAcc + txt.wow.accwarn_2 + (CONSTANTS.ACC_WARNING_THRESHOLD * weeks) + "\n"
+			}
+			$scope.wordOfAdvice = txt.wow.wow1 + weeksSince + txt.wow.wow2 + "\n" +
+				txt.wow.wow3 + "\n" + accWarn +
+				txt.wow.wow4 + warningTxt;
+		};
+				
+		/**
+		 * Calc init
+		 * The onClickListener which sets it all in motion, and updates the GUI with the different results
+		 */
 		$scope.doCalc = function () {
 			$scope.showResults = true;
 			$scope.estimatedTargetAttack = $scope.estAtt($scope.stats.targetDef);
@@ -133,8 +149,7 @@
 			$scope.estimateMyKingpinPower = $scope.assessKP($scope.stats.myKingpin);
 			
 			if ($scope.showWarningTxt) 
-				$scope.createAWordOfAdvice ($scope.stats.myMafiaAcc, $scope.stats.myKingpin, $scope.weeks) ;
+				$scope.createAWordOfAdvice ($scope.stats.myMafiaAcc, $scope.stats.myKingpin, weeks);
 		}
-  });
-
-})();	
+  	});
+})();

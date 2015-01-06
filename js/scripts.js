@@ -9,20 +9,21 @@
  * Contact      :   nicolajnyvang@gmail.com
  * Project URL  :   https://github.com/nyvang/cc-calc
  */
-(function () {
  
+(function () {
  	'use strict';
+	
 	var app = angular.module('cccalc', [ 'calculation-logic' ]);
 	
-	// Init directives for easy overview of the index.html
-	/* Header */
+	/* Init directives for easy overview of the index.html */
+	// Header
 	app.directive('headerSection', function() {
 		return {
 			restrict: 		'E',
 			templateUrl: 	'templates/_header.html'
 		};
 	});
-	/* Main content (calculator inputform && output result) */
+	// Main content (calculator inputform && output result)
 	app.directive('contentSection', function() {
 		return {
 			restrict: 		'A',
@@ -31,7 +32,7 @@
 			controllerAs: 	'calc'
 		};
 	});
-	/* Footer */
+	// Footer
 	app.directive('footerSection', function() {
 		return {
 			restrict: 		'E',
