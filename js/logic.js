@@ -23,12 +23,17 @@
 	 */	
 	logic.controller('calculations', function ($scope, $window, initConstants, weekCalcService, systemLanguage) {
 		
-		/********* Init *********/
+		/********* Init re-usable variables *********/
 
-		// Start off by collecting data from injected dependencies
+		var	good, medium, low;
+
+		/********* Envoking injections *********/
+
 		var weeks 						= weekCalcService,
-		 	txt 						= systemLanguage,
+		 	lngObject 					= systemLanguage,
 			CONSTANTS 					= initConstants;
+
+		/********* ng-models && bindings *********/
 
 		// Player stats ( initiated with testvalues during devphase )
 		$scope.stats 					= {};
@@ -54,66 +59,61 @@
 
 	 	/**
 		 * Most players have 1.5 x higher attack than defence,
-		 * hence, the multiplier is: 1.5
+		 * hence, the multiplier default is: 1.5
 		 */
 		$scope.estAtt = function (targetDef) {
     		return Math.floor(CONSTANTS.ATT_TO_DEF_MULTIPLIER * targetDef);
 		};
 		
+		// Estimate targets total mafia
 		$scope.estTotal = function (targetDef, targetAtt) {
 		 	return targetDef + targetAtt;
 		};
 
-		
-		var	good, medium, low;
-
-	
-
+		// Calculate chances based on Accomplish size and weeks since release
 		$scope.assessAcc = function (myAcc) {
 	
-
 		 	// Thresholds
-		 	// chances = pointsPerWeek * weeksSinceRelease
+		 	// chances = pointsPerWeek x weeksSinceRelease
 			good = CONSTANTS.CHANCEMULTIPLIER.ACC_HIGH * weeks;
 			medium = CONSTANTS.CHANCEMULTIPLIER.ACC_MEDIUM * weeks;
 			low = CONSTANTS.CHANCEMULTIPLIER.ACC_LOW  * weeks;
 
-			console.log(CONSTANTS.CHANCEMULTIPLIER.ACC_LOW);
-
-			console.log(CONSTANTS);
 		 	// Actual logic
+		 	// Todo: Fix bad design (else if, else if, else if etc..)
 			if (myAcc < low) {
-				return txt.acc.none;
+				return lngObject.acc.none;
 			} else if (myAcc < medium) {
-				return txt.acc.low;
+				return lngObject.acc.low;
 			} else if (myAcc < good) {
-				return txt.acc.medium;
+				return lngObject.acc.medium;
 			} else if (myAcc >= good) {
 				$scope.showWarningTxt = false;
-				return txt.acc.good;
+				return lngObject.acc.good;
 			}
 		};
 		
+		// Calculate chances based on Kingpin Power size and weeks since release
 		$scope.assessKP = function (myKP) {
 
 			good = CONSTANTS.CHANCEMULTIPLIER.KP_HIGH * weeks;
 			medium = CONSTANTS.CHANCEMULTIPLIER.KP_MEDIUM * weeks;
 			low = CONSTANTS.CHANCEMULTIPLIER.KP_LOW * weeks;
 
-			if ((myKP < low) && ($scope.estimateMyAccomplice === txt.acc.good)) {
-				return txt.kp.none;
+			if ((myKP < low) && ($scope.estimateMyAccomplice === lngObject.acc.good)) {
+				return lngObject.kp.none;
 
-			} else if (myKP < medium && ($scope.estimateMyAccomplice === txt.acc.good))  {
-				return txt.kp.low;
+			} else if (myKP < medium && ($scope.estimateMyAccomplice === lngObject.acc.good))  {
+				return lngObject.kp.low;
 
 			} else if (myKP < good) {
-				console.log(txt.kp.highkp);
-				return txt.kp.medium;
+				console.log(lngObject.kp.highkp);
+				return lngObject.kp.medium;
 
 			} else if (myKP >= good) {
-				console.log(txt.kp.veryhighkp);
+				console.log(lngObject.kp.veryhighkp);
 				$scope.showWarningTxt = false;
-				return txt.kp.good;
+				return lngObject.kp.good;
 			}
 		};
 		
@@ -122,19 +122,19 @@
 		 * Based on playerstats, time and a fixed threashold
 		 */
 		$scope.createAWordOfAdvice = function (myAcc, myKp, weeksSince) {
-			var highest = (myAcc > myKp) ? txt.acc.name : txt.kp.name;
+			var highest = (myAcc > myKp) ? lngObject.acc.name : lngObject.kp.name;
 			var warningTxt = "",
 				accWarn = "";
 
-		  	if (highest === txt.kp.name) {
-				warningTxt = txt.wow.kpwarning;  
+		  	if (highest === lngObject.kp.name) {
+				warninglngObject = lngObject.wow.kpwarning;  
 			}
 			if (myAcc < (CONSTANTS.ACC_WARNING_THRESHOLD * weeks)) {
-				accWarn = txt.wow.accwarn_1 + myAcc + txt.wow.accwarn_2 + (CONSTANTS.ACC_WARNING_THRESHOLD * weeks) + "\n"
+				accWarn = lngObject.wow.accwarn_1 + myAcc + lngObject.wow.accwarn_2 + (CONSTANTS.ACC_WARNING_THRESHOLD * weeks) + "\n"
 			}
-			$scope.wordOfAdvice = txt.wow.wow1 + weeksSince + txt.wow.wow2 + "\n" +
-				txt.wow.wow3 + "\n" + accWarn +
-				txt.wow.wow4 + warningTxt;
+			$scope.wordOfAdvice = lngObject.wow.wow1 + weeksSince + lngObject.wow.wow2 + "\n" +
+				lngObject.wow.wow3 + "\n" + accWarn +
+				lngObject.wow.wow4 + warningTxt;
 		};
 				
 		/**

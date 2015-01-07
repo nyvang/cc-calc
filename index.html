@@ -1,30 +1,24 @@
 <!DOCTYPE html>
-<html ng-app="cccalc" lang="en">
+<html ng-app="cccalc" ng-strict-di lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>Crime City fight calculator</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Crime City PVP/Rob/war Calculator">
-  <meta name="author" content="Nicolaj Nyvang">
+	<meta charset="utf-8">
+	<title>Crime City fight calculator</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="Crime City PVP/Rob/war Calculator">
+	<meta name="author" content="Nicolaj Nyvang">
 
+	<!-- Remove the standard Bootstrap Glyphicons and reference Font Awesome - the name says it all! -->
 	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
-	<link href="css/bootstrap.min.css" rel="stylesheet">
-	<link href="css/style.css" rel="stylesheet">
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/style.css">
 
-  <!-- Fav and touch icons -->
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="img/apple-touch-icon-144-precomposed.png">
-  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="img/apple-touch-icon-114-precomposed.png">
-  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="img/apple-touch-icon-72-precomposed.png">
-  <link rel="apple-touch-icon-precomposed" href="img/apple-touch-icon-57-precomposed.png">
-  <link rel="shortcut icon" href="img/favicon.png">
-  
-	<script type="text/javascript" src="js/localization/languages.js"></script>
-	<script src="http://code.angularjs.org/1.2.6/angular.js"></script>
-	<script type="text/javascript" src="js/scripts.js"></script>
-	<script type="text/javascript" src="js/logic.js"></script>
-	<script type="text/javascript" src="js/services.js"></script>
+	<!-- Fav and touch icons -->
+	<link rel="apple-touch-icon-precomposed" href="img/apple-touch-icon-144-precomposed.png" sizes="144x144">
+	<link rel="apple-touch-icon-precomposed" href="img/apple-touch-icon-114-precomposed.png" sizes="114x114">
+	<link rel="apple-touch-icon-precomposed" href="img/apple-touch-icon-72-precomposed.png"  sizes="72x72">
+	<link rel="apple-touch-icon-precomposed" href="img/apple-touch-icon-57-precomposed.png"  sizes="57x57">
+	<link rel="shortcut icon" href="img/favicon.png">
 </head>
-
 <body>
 	<div class="container">
 		
@@ -38,5 +32,22 @@
 		<footer-section></footer-section>
 	
 	</div>
+
+	<!-- Custom made localization object -->
+	<script type="text/javascript" src="js/localization/languages.js"></script>
+	
+	<!-- Load some epic awesomeness -->
+	<script type="text/javascript" src="http://code.angularjs.org/1.2.6/angular.js"></script>
+	
+	<!-- Add html templating to improve readabillity -->
+	<script type="text/javascript" src="js/scripts.js"></script>
+	
+	<!-- Define a few calculations and wrap it in a controller -->
+	<script type="text/javascript" src="js/logic.js"></script>
+	
+	<!-- Take some of the magic and stuf it into a service -->
+	<script type="text/javascript" src="js/services.js"></script>
+
+	<!-- That´s it, we are ready to rock and roll, with jQuery left out in the cold :) -->
 </body>
 </html>
